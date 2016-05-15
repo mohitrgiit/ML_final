@@ -44,13 +44,13 @@ def predict(model, path):
     img = cv2.imread(path)
     shape = np.array(img.shape)
     img = cv2.resize(img, tuple(np.flipud(shape[:2])*2), interpolation=cv2.INTER_CUBIC)
-    cv2.imwrite("cubic.png", img)
+    cv2.imwrite("test_cubic.png", img)
     shape = list(img.shape)
     shape.insert(0, -1)
     img = img.reshape(tuple(shape))
     img = (img.transpose(0, 3, 1, 2)) / 255
     out = model.predict(img)
-    cv2.imwrite("predict_single.png", out[0].transpose(1, 2, 0)*255)
+    cv2.imwrite("test_after.png", out[0].transpose(1, 2, 0)*255)
 
 model = set_model("SR")
 predict(model, "test.jpg")
