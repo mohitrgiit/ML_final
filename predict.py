@@ -40,15 +40,16 @@ def predict_batch(model, testdata_path, num):
     visualize = output.transpose(0,2,3,1)
     cv2.imwrite("after.png", visualize[num]*255)
 
-def predict(model, path):
+def predict(model, path, mode="SR"):
     img = cv2.imread(path)
     shape = np.array(img.shape)
-    img = cv2.resize(img, tuple(np.flipud(shape[:2])*2), interpolation=cv2.INTER_CUBIC)
-    cv2.imwrite("test_cubic.png", img)
+    if mode=="SR":
+        img = cv2.resize(img, tuple(np.flipud(shape[:2])*2), interpolation=cv2.INTER_CUBIC)
+        cv2.imwrite("test_cubic.png", img)
     shape = list(img.shape)
     shape.insert(0, -1)
     img = img.reshape(tuple(shape))
-    img = (img.transpose(0, 3, 1, 2)) / 255
+    img = (img.transpose(0, 3, 1, 2))/255
     out = model.predict(img)
     cv2.imwrite("test_after.png", out[0].transpose(1, 2, 0)*255)
 
