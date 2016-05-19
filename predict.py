@@ -41,11 +41,19 @@ def predict_batch(model, testdata_path, num):
     cv2.imwrite("after.png", visualize[num]*255)
 
 def predict(model, path, mode="SR"):
-    img = cv2.imread(path)
+    img = cv2.imread(path).astype("float32")
     shape = np.array(img.shape)
     if mode=="SR":
         img = cv2.resize(img, tuple(np.flipud(shape[:2])*2), interpolation=cv2.INTER_CUBIC)
         cv2.imwrite("test_cubic.png", img)
+    if mode=="DN":
+        np.random.seed()
+        ga_num = np.random.normal(scale=10, size=img.shape)
+        img+=ga_num
+        cv2.imwrite("test_noise.png", img)
+    if mode=="DB":
+        img = cv2.GaussianBlur(img, ksize=(0, 0), sigmaX=0.8, sigmaY=0.8)
+        cv2.imwrite("test_blur.png", img)
     shape = list(img.shape)
     shape.insert(0, -1)
     img = img.reshape(tuple(shape))
@@ -53,6 +61,6 @@ def predict(model, path, mode="SR"):
     out = model.predict(img)
     cv2.imwrite("test_after.png", out[0].transpose(1, 2, 0)*255)
 
-model = set_model("SR")
-predict(model, "test.jpg")
+model = set_model("DB")
+predict(model, "test.jpg", mode="DB")
 # predict_batch(model, "train_data/numeric_data/test_pic.npy", 4)
