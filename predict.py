@@ -40,7 +40,7 @@ def predict_batch(model, testdata_path, num):
     visualize = output.transpose(0,2,3,1)
     cv2.imwrite("after.png", visualize[num]*255)
 
-def predict(model, path, mode):
+def predict(model, path, mode=None):
     img = cv2.imread(path).astype("float32")
     shape = np.array(img.shape)
     if mode=="SR":
@@ -61,6 +61,6 @@ def predict(model, path, mode):
     out = model.predict(img)
     cv2.imwrite("test_after.png", out[0].transpose(1, 2, 0)*255)
 
-model = set_model("DB")
-predict(model, "test.jpg", mode="DB")
+model = set_model("SR")
+predict(model, "test.jpg")
 # predict_batch(model, "train_data/numeric_data/test_pic.npy", 4)
