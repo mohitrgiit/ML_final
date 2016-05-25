@@ -40,7 +40,7 @@ def predict_batch(model, testdata_path, num):
     visualize = output.transpose(0,2,3,1)
     cv2.imwrite("after.png", visualize[num]*255)
 
-def predict(model, path, mode="SR"):
+def predict(model, path, mode):
     img = cv2.imread(path).astype("float32")
     shape = np.array(img.shape)
     if mode=="SR":
